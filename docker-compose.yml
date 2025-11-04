@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  caba-arbitros-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caba-arbitros-api:latest
+    container_name: caba-arbitros-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=3000
+      - SPRING_BOOT_API_URL=${SPRING_BOOT_API_URL:-http://host.docker.internal:8081/api/v1}
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-in-production}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-7d}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET:-caba-arbitros-images}
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - caba-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  caba-network:
+    driver: bridge
+
+# Para uso con Spring Boot local:
+# docker-compose up -d
+# La API estará disponible en http://localhost:3000
+# 
+# Variables de entorno se toman del archivo .env
+# Crear .env basado en .env.example antes de ejecutar
