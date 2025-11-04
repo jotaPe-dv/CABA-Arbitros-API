@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   caba-arbitros-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: caba-arbitros-api:latest
+    image: jotapedv/caba-arbitros-api:latest
+    # Para desarrollo local, descomentar y comentar 'image':
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     container_name: caba-arbitros-api
     restart: unless-stopped
     ports:

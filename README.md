@@ -140,11 +140,15 @@ docker-compose up -d
 
 ## 📦 Docker Hub
 
-La imagen se publica automáticamente en Docker Hub mediante GitHub Actions:
+La imagen está disponible públicamente en Docker Hub:
 
 ```bash
-docker pull <your-dockerhub-username>/caba-arbitros-api:latest
+docker pull jotapedv/caba-arbitros-api:latest
+# O versión específica
+docker pull jotapedv/caba-arbitros-api:v1.0.0
 ```
+
+**Docker Hub Repository**: https://hub.docker.com/r/jotapedv/caba-arbitros-api
 
 ## ☁️ Despliegue en AWS EC2 con Docker Swarm
 
